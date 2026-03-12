@@ -19,6 +19,7 @@ Sub-agents are Markdown files with YAML frontmatter stored in:
 ---
 name: subagent-name
 description: When to use this subagent (include "use proactively" for auto-delegation)
+isolation: worktree
 tools: Tool1, Tool2, Tool3  # Optional - inherits all if omitted
 model: sonnet               # Optional - sonnet/opus/haiku/inherit
 permissionMode: default     # Optional - default/acceptEdits/bypassPermissions/plan
@@ -34,6 +35,7 @@ System prompt goes here. Define role, responsibilities, and behavior.
 |-------|----------|-------------|
 | `name` | Yes | Lowercase with hyphens |
 | `description` | Yes | Purpose and when to use (key for auto-delegation) |
+| `isolation` | Yes | always `worktree` |
 | `tools` | No | Comma-separated tool list (omit to inherit all) |
 | `model` | No | `sonnet`, `opus`, `haiku`, or `inherit` |
 | `permissionMode` | No | `default`, `acceptEdits`, `bypassPermissions`, `plan` |

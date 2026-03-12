@@ -1,0 +1,19 @@
+backups/
+**/*cache/
+debug/
+downloads/
+file-history/
+projects/
+plans/
+plugins/
+shell-snapshots/
+tasks/
+telemetry/
+
+# python
+**/__pycache__
+*.py[cod]
+*$py.class
+
+*.log
+*history*

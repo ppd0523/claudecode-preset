@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [],
+    "deny": [],
+    "ask": [],
+    "defaultMode": "default"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash $HOME/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+  },
+  "language": "Korean",
+  "alwaysThinkingEnabled": false,
+  "effortLevel": "medium",
+  "voiceEnabled": false
+}

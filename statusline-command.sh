@@ -1,21 +1,19 @@
 #!/usr/bin/env bash
-# Claude Code status line - inspired by the "refined" (Pure) zsh theme
+# Claude Code status line - based on PS1 from ~/.bashrc
 
 input=$(cat)
 
-cwd=$(echo "$input" | jq -r '.workspace.current_dir // .cwd // ""')
-model=$(echo "$input" | jq -r '.model.display_name // ""')
-used=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
-if [ -z "$used" ]; then
-  remaining=$(echo "$input" | jq -r '.context_window.remaining_percentage // empty')
-  if [ -n "$remaining" ]; then
-    used=$(echo "$remaining" | awk '{printf "%d", 100 - $1}')
-  fi
+model=$(echo "$input" | grep -o '"display_name":"[^"]*"' | cut -d'"' -f4)
+if [ -z "$model" ]; then
+  model=$(echo "$input" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
 fi
 
+# used_percentage
+used=$(echo "$input" | grep -o '"used_percentage":[0-9]*' | cut -d':' -f2)
+
 # Shorten home directory to ~
-home="$HOME"
-short_cwd="${cwd/#$home/~}"
+cwd=$(echo "$input" | grep -o '"current_dir":"[^"]*"' | cut -d'"' -f4)
+short_cwd=$(echo $cwd | sed "s|^$HOME/|~/|")
 
 # Git branch (skip optional locks)
 git_branch=""
@@ -27,12 +25,13 @@ if git -C "$cwd" rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
     git_branch="${git_branch}*"
   fi
 fi
-
-# Build the status line
+ 
+# Build parts - only add directory if available
 parts=""
-
-# Directory (green)
-parts=$(printf '\033[32m%s\033[0m' "$short_cwd")
+if [ -n "$short_cwd" ]; then
+  dir_part=$(printf '\033[01;34m%s\033[00m' "$short_cwd")
+  parts="${dir_part}"
+fi
 
 # Git branch (dark gray)
 if [ -n "$git_branch" ]; then

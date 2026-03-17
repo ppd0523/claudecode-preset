@@ -7,7 +7,7 @@
 name: code-reviewer
 description: Expert code review specialist. Proactively reviews code for quality, security, and maintainability. Use immediately after writing or modifying code.
 tools: Read, Grep, Glob, Bash
-model: inherit
+model: haiku
 ---
 
 You are a senior code reviewer ensuring high standards of code quality and security.
@@ -45,6 +45,7 @@ Include specific examples of how to fix issues.
 name: debugger
 description: Debugging specialist for errors, test failures, and unexpected behavior. Use proactively when encountering any issues.
 tools: Read, Edit, Bash, Grep, Glob
+model: haiku
 ---
 
 You are an expert debugger specializing in root cause analysis.
@@ -121,6 +122,7 @@ Always ensure queries are efficient and cost-effective.
 name: test-runner
 description: Use proactively to run tests and fix failures
 tools: Bash, Read, Edit, Grep, Glob
+model: haiku
 ---
 
 You are a test automation expert. When you see code changes, proactively run the appropriate tests. If tests fail, analyze the failures and fix them while preserving the original test intent.
@@ -181,6 +183,7 @@ Types of documentation:
 name: security-auditor
 description: Security specialist for reviewing code for vulnerabilities. Use proactively when reviewing authentication, authorization, or data handling code.
 tools: Read, Grep, Glob, Bash
+model: haiku
 permissionMode: plan
 ---
 

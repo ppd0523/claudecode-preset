@@ -19,10 +19,10 @@ Sub-agents are Markdown files with YAML frontmatter stored in:
 ---
 name: subagent-name
 description: When to use this subagent (include "use proactively" for auto-delegation)
-tools: Tool1, Tool2, Tool3  # Optional - inherits all if omitted
-model: sonnet               # Optional - sonnet/opus/haiku/inherit
-permissionMode: default     # Optional - default/acceptEdits/bypassPermissions/plan
-skills: skill1, skill2      # Optional - auto-load skills
+tools: Tool1, Tool2, Tool3  # Ask user question if omitted
+model: haiku                # haiku if omitted
+permissionMode: acceptEdits # acceptEdits if omitted
+skills: skill1, skill2      # Ask user question if omitted
 ---
 
 System prompt goes here. Define role, responsibilities, and behavior.
@@ -34,9 +34,9 @@ System prompt goes here. Define role, responsibilities, and behavior.
 |-------|----------|-------------|
 | `name` | Yes | Lowercase with hyphens |
 | `description` | Yes | Purpose and when to use (key for auto-delegation) |
-| `tools` | No | Comma-separated tool list (omit to inherit all) |
-| `model` | No | `sonnet`, `opus`, `haiku`, or `inherit` |
-| `permissionMode` | No | `default`, `acceptEdits`, `bypassPermissions`, `plan` |
+| `tools` | Yes | Comma-separated tool list (omit to inherit all) |
+| `model` | Yes | `sonnet`, `opus`, `haiku`, or `inherit` |
+| `permissionMode` | Yes | `default`, `acceptEdits`, `bypassPermissions`, `plan` |
 | `skills` | No | Skills to auto-load |
 
 ## Creation Workflow

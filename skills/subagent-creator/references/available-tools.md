@@ -12,14 +12,12 @@ Sub-agents can be granted access to any of Claude Code's internal tools. If `too
 | `Glob` | Find files by pattern matching |
 | `Grep` | Search file contents with regex |
 | `Bash` | Execute shell commands |
-| `Task` | Spawn sub-agents (not recommended for sub-agents) |
 
 ## Interaction Tools
 
 | Tool | Description |
 |------|-------------|
-| `AskUser` | Ask user questions for clarification |
-| `TodoWrite` | Manage task lists |
+| `AskUserQuestion` | Ask user questions for clarification |
 
 ## Web Tools
 
@@ -34,6 +32,15 @@ Sub-agents can be granted access to any of Claude Code's internal tools. If `too
 |------|-------------|
 | `mcp__ide__getDiagnostics` | Get language diagnostics from VS Code |
 | `mcp__ide__executeCode` | Execute code in Jupyter kernel |
+
+## Worktree Tools (for Isolation)
+
+| Tool | Description |
+|------|-------------|
+| `EnterWorktree` | Manually enter a git worktree (low-level) |
+| `ExitWorktree` | Manually exit a git worktree (low-level) |
+
+Note: Prefer using `isolation: worktree` in sub-agent frontmatter for automatic worktree management instead of manual tools.
 
 ## MCP Tools
 

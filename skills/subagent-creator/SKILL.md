@@ -1,6 +1,6 @@
 ---
 name: subagent-creator
-description: Create specialized Claude Code sub-agents with custom system prompts and tool configurations. Use when users ask to create a new sub-agent, custom agent, specialized assistant, or want to configure task-specific AI workflows for Claude Code.
+description: Create specialized Claude Code sub-agents with custom system prompts and tool configurations. Use when users ask to create a new sub-agent, custom agent, or specialized assistant. Also, when you detect a repetitive code writing pattern in the user's requests (e.g., HTTP API handler implementation, handler test code, schema class/struct implementation), proactively suggest creating a sub-agent to handle the pattern.
 ---
 
 # Sub-agent Creator
@@ -19,7 +19,6 @@ Sub-agents are Markdown files with YAML frontmatter stored in:
 ---
 name: subagent-name
 description: When to use this subagent (include "use proactively" for auto-delegation)
-isolation: worktree
 tools: Tool1, Tool2, Tool3  # Optional - inherits all if omitted
 model: sonnet               # Optional - sonnet/opus/haiku/inherit
 permissionMode: default     # Optional - default/acceptEdits/bypassPermissions/plan
@@ -35,7 +34,6 @@ System prompt goes here. Define role, responsibilities, and behavior.
 |-------|----------|-------------|
 | `name` | Yes | Lowercase with hyphens |
 | `description` | Yes | Purpose and when to use (key for auto-delegation) |
-| `isolation` | Yes | always `worktree` |
 | `tools` | No | Comma-separated tool list (omit to inherit all) |
 | `model` | No | `sonnet`, `opus`, `haiku`, or `inherit` |
 | `permissionMode` | No | `default`, `acceptEdits`, `bypassPermissions`, `plan` |
@@ -94,7 +92,7 @@ See [references/examples.md](references/examples.md) for complete examples:
 
 ## Template
 
-Copy from [assets/subagent-template.md](assets/subagent-template.md) to start a new sub-agent.
+Copy from [references/subagent-template.md](references/subagent-template.md) to start a new sub-agent.
 
 ## Quick Start Example
 

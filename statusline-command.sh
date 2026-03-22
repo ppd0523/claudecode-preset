@@ -1,19 +1,32 @@
 #!/usr/bin/env bash
-# Claude Code status line - based on PS1 from ~/.bashrc
+# Claude Code status line - inspired by the "refined" (Pure) zsh theme
 
 input=$(cat)
+echo "[claude input] $input" >> claude-input.txt
 
-model=$(echo "$input" | grep -o '"display_name":"[^"]*"' | cut -d'"' -f4)
-if [ -z "$model" ]; then
-  model=$(echo "$input" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
+# Parse single-line JSON using grep -o + awk
+cwd=$(echo "$input" | grep -o '"current_dir":"[^"]*"' | awk -F'"' '{print $4}')
+[ -z "$cwd" ] && cwd=$(echo "$input" | grep -o '"cwd":"[^"]*"' | awk -F'"' '{print $4}')
+
+model=$(echo "$input" | grep -o '"display_name":"[^"]*"' | awk -F'"' '{print $4}')
+
+used=$(echo "$input" | grep -o '"used_percentage":[0-9]*' | head -1 | awk -F: '{print $2}')
+if [ -z "$used" ]; then
+  remaining=$(echo "$input" | grep -o '"remaining_percentage":[0-9]*' | head -1 | awk -F: '{print $2}')
+  if [ -n "$remaining" ]; then
+    used=$(echo "$remaining" | awk '{printf "%d", 100 - $1}')
+  fi
 fi
 
-# used_percentage
-used=$(echo "$input" | grep -o '"used_percentage":[0-9]*' | cut -d':' -f2)
+five_hour=$(echo "$input" | grep -o '"five_hour":{[^}]*}' | grep -o '"used_percentage":[0-9]*' | awk -F: '{print $2}')
+[ -z "$five_hour" ] && five_hour=0
+
+seven_day=$(echo "$input" | grep -o '"seven_day":{[^}]*}' | grep -o '"used_percentage":[0-9]*' | awk -F: '{print $2}')
+[ -z "$seven_day" ] && seven_day=0
 
 # Shorten home directory to ~
-cwd=$(echo "$input" | grep -o '"current_dir":"[^"]*"' | cut -d'"' -f4)
-short_cwd=$(echo $cwd | sed "s|^$HOME/|~/|")
+home="$HOME"
+short_cwd="${cwd/#$home/~}"
 
 # Git branch (skip optional locks)
 git_branch=""
@@ -25,13 +38,12 @@ if git -C "$cwd" rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
     git_branch="${git_branch}*"
   fi
 fi
- 
-# Build parts - only add directory if available
+
+# Build the status line
 parts=""
-if [ -n "$short_cwd" ]; then
-  dir_part=$(printf '\033[01;34m%s\033[00m' "$short_cwd")
-  parts="${dir_part}"
-fi
+
+# Directory (green)
+parts=$(printf '\033[32m%s\033[0m' "$short_cwd")
 
 # Git branch (dark gray)
 if [ -n "$git_branch" ]; then
@@ -51,6 +63,13 @@ if [ -n "$used" ]; then
   else
     parts="$parts $(printf '\033[90mctx:%s%%\033[0m' "$used_int")"
   fi
+fi
+
+# Rate limits: (5h%/7d%) — 어느 하나라도 80% 이상이면 빨간색, 아니면 회색
+if [ "$five_hour" -ge 80 ] || [ "$seven_day" -ge 80 ] 2>/dev/null; then
+  parts="$parts $(printf '\033[31m(%d%%/%d%%)\033[0m' "$five_hour" "$seven_day")"
+else
+  parts="$parts $(printf '\033[90m(%d%%/%d%%)\033[0m' "$five_hour" "$seven_day")"
 fi
 
 printf '%s' "$parts"
